@@ -1,0 +1,31 @@
+#!/usr/bin/env python
+import argparse
+import json
+import os
+from pprint import pprint
+from wakeonlan import wol
+
+# Parse the command line parameters.
+parser = argparse.ArgumentParser(description="Wake on lan by hostname")
+parser.add_argument('hostname')
+args = parser.parse_args()
+
+# Read the wol.cfg file to get a dictionary of machine to mac addresses
+# TODO: Add exception handler here if the wol.cfg file does not exist or is empty.
+wol_config = os.path.dirname(os.path.realpath(__file__)) + '/wol.cfg'
+with open(wol_config) as data_file:
+    data = json.load(data_file)
+
+#pprint(data)
+machines = data["machines"]
+
+# Validate that the hostname to wake on lan exists in dictionary
+if args.hostname not in machines:
+    print "Error: Unknown hostname", args.hostname
+    print
+    parser.print_help()
+    exit()
+
+# Call the wake on lan library
+print "Sending magic packet to:", args.hostname, machines[args.hostname]
+wol.send_magic_packet(machines[args.hostname])
