@@ -1,0 +1,11 @@
+#!/bin/sh
+
+# install --- Install the wol files into the users bin directory.
+#             If the users bin directory does not exist, create it.
+# Mike Barker <mike@thebarkers.com>
+# August 11th, 2015
+
+install -d $HOME/bin
+
+install -bcv wol $HOME/bin
+install -bcv wol.cfg $HOME/bin
